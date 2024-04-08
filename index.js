@@ -21,7 +21,7 @@ app.post('/oauth/token', obtainToken);
 
 async function start() {
     try{
-        await mongoose.connect('mongodb+srv://Anjali:Qwerty%40123@tomatodatabase.mpcs8o4.mongodb.net/?retryWrites=true&w=majority');
+        await mongoose.connect('mongodb+srv://Anjali:Qwerty%40123@lottery.uxtblux.mongodb.net/?retryWrites=true&w=majority&appName=Lottery');
         console.log('connected to mongodb');
         app.listen(3000, function () {
             console.log('Server is listening on port 3000');
