@@ -4,7 +4,10 @@ var express = require('express'),
  Oauth2Server = require('oauth2-server'),
  Request = Oauth2Server.Request,
  Response = Oauth2Server.Response;
-var app = express();
+
+
+ var app = express();
+
 
 const clientModel = require('./models/User/client.js');
 
