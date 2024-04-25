@@ -26,7 +26,7 @@ const deletePlayer = require("../controllers/Player/delete_player");
 const getAllPlayerByTeamid = require("../controllers/Player/get_all_player_by_teamid");
 const playerOnGround = require("../controllers/Player/player_on_ground");
 router.route("/addPlayer").post(authenticaterequest,addPlayer);
-router.route("/getAllPlayerByTeamid").get(authenticaterequest, getAllPlayerByTeamid)
+router.route("/getAllPlayerByTeamid/:id").get(authenticaterequest, getAllPlayerByTeamid)
 router.route("/playerOnGround").post(authenticaterequest, playerOnGround);
 router.route("/deletePlayer").post(authenticaterequest,deletePlayer);
 
@@ -46,6 +46,11 @@ router.route("/getMatchDetailByMatchId").get(authenticaterequest, getMatchDetail
 const addInningDetail = require("../controllers/Innings/add_inning_detail");
 router.route("/addInningDetail").post(authenticaterequest, addInningDetail);
 
+//Swagger
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('../docs/swagger');
+// router.route('/docs').get(swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+router.route('/docs').get(swaggerDocument);
 
 const oauthServer = new Oauth2Server({
     model: require("../model"),

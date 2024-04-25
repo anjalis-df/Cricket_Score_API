@@ -19,8 +19,9 @@ const getAllPlayerByTeamId = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Invalid user' });
         }
-        const { team_id } = req.body;
-        console.log("Request Body: ", req.body);
+        // const { team_id } = req.body;
+        const team_id = req.params.id;
+        console.log("Request param: ", req.params.id);
         const team = await teammodel.findOne({ team_id: team_id });
         console.log("Team: ", team);
         if (!team) {
