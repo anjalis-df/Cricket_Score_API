@@ -83,25 +83,25 @@ const addPlayerArray = async (req, res) => {
         const names = new Set();
         const contactNumber = new Set();
         for(const player of players) {
-            console.log("Player ************", player);
+            // console.log("Player ************", player);
             if(names.has(player.player_name) || contactNumber.has(player.player_mobile_no)) {
                 return res.status(400).json({ message: 'Name and contact number should be unique' });
             }
             names.add(player.player_name);
             contactNumber.add(player.player_mobile_no);
-            console.log("names SET: ", names);
-            console.log("contactNumber SET: ", contactNumber);
+            // console.log("names SET: ", names);
+            // console.log("contactNumber SET: ", contactNumber);
         }
-        console.log("isPlayerExist######: ", isPlayerExist);
+        // console.log("isPlayerExist######: ", isPlayerExist);
         if (isPlayerExist.length > 0) {
             return res.status(400).json({ message: 'Player already exists' });
         }
         const playerObjects = [];
         let count = 0;
         while (players.length > 0) {
-            console.log("Inside Loop**************")
-            console.log("Players lenght ***********: ", players.length);
-            console.log("Count ***********: ", count);
+            // console.log("Inside Loop**************")
+            // console.log("Players lenght ***********: ", players.length);
+            // console.log("Count ***********: ", count);
             const player = players.shift();
             const addPlayer = new playermodel({
                 player_name: player.player_name,
@@ -110,18 +110,18 @@ const addPlayerArray = async (req, res) => {
                 // player_role: player.player_role
             })
             const team = await teammodel.findOne({ team_id: player.team_id });
-            console.log("Team **********: ", team);
+            // console.log("Team **********: ", team);
             if (!team) {
-                console.log("111111111111111")
+                // console.log("111111111111111")
                 return res.status(404).json({ message: 'Team not found' });
             }else if (!team.user_id.equals(user.user_id)) {
-                console.log("222222222222222")
+                // console.log("222222222222222")
                 return res.status(401).json({ message: 'Unauthorized' });
             }else if (!addPlayer.team_id.equals(team.team_id)) {
-                console.log("3333333333333333")
+                // console.log("3333333333333333")
                 return res.status(401).json({ message: 'Unauthorized' });
             }
-            console.log("4444444444444444")
+            // console.log("4444444444444444")
             // const playerObjects = playerObjects.push(addPlayer);
             playerObjects.push(addPlayer);
             console.log("playerObjects*********: ", playerObjects);
