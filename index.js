@@ -24,6 +24,7 @@ app.post('/oauth/token', obtainToken);
 
 async function start() {
     try{
+        // await mongoose.connect('mongodb+srv://Anjali:Qwerty%40123@lottery.uxtblux.mongodb.net/?retryWrites=true&w=majority&appName=Lottery');
         await mongoose.connect('mongodb+srv://Anjali:Qwerty%40123@lottery.uxtblux.mongodb.net/?retryWrites=true&w=majority&appName=Lottery');
         console.log('connected to mongodb');
         app.listen(3000, function () {
