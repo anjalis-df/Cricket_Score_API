@@ -78,7 +78,7 @@ const addPlayerArray = async (req, res) => {
         if (checkPlayersArrayIsEmptyOrNot) {
             return res.status(400).json({ message: 'Players array is empty, Please enter atleast one player' });
         }
-        console.log("********: ", req.body)
+        console.log("********: req body ", req.body)
         const isPlayerExist = await playermodel.find({ player_mobile_no: { $in: players.map(player => player.player_mobile_no) } });
         const names = new Set();
         const contactNumber = new Set();
