@@ -25,10 +25,12 @@ const addPlayer = require("../controllers/Player/add_player");
 const deletePlayer = require("../controllers/Player/delete_player");
 const getAllPlayerByTeamid = require("../controllers/Player/get_all_player_by_teamid");
 const playerOnGround = require("../controllers/Player/player_on_ground");
+const OnGroundPlayerOfTeam = require("../controllers/Player/add_on_ground_player_of_team");
 router.route("/addPlayer").post(authenticaterequest,addPlayer);
 router.route("/getAllPlayerByTeamid/:id").get(authenticaterequest, getAllPlayerByTeamid)
 router.route("/playerOnGround").post(authenticaterequest, playerOnGround);
 router.route("/deletePlayer").post(authenticaterequest,deletePlayer);
+router.route("/AddOnGroundPlayerOfTeam").post(authenticaterequest, OnGroundPlayerOfTeam);
 
 //Match Details
 const getAllMatchDetail = require("../controllers/Match/get_all_match_detail");

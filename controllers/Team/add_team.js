@@ -36,6 +36,6 @@ const addTeam = async (req, res) => {
         const result = await team.save();
         res.status(201).json({message: 'Team created successfully', team: result});
 }catch (err) {
-    res.status(400).json(err);
+    return res.status(400).json({ message: err.message });
 }};
 module.exports = addTeam;

@@ -20,7 +20,7 @@ const userLogin = async (req, res) => {
     res.status(200).json({message: 'User logged in successfully', user: user});
 
 }catch (err) {
-        res.status(400).json(err);
+    return res.status(400).json({ message: err.message });
     }
 }
 

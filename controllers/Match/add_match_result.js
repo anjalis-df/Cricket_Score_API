@@ -23,7 +23,12 @@ const addMatchResult = async (req, res) => {
             return res.status(401).json({ message: 'Invalid user' });
         }
         
-        const {match_id, match_result, team_1id, team_2id, match_date, winning_team_id, win_by_runs, win_by_wickets} = req.body;
+        const {match_id, team_1id, team_2id, winning_team_id, win_by_runs, win_by_wickets, inning_id} = req.body;
+
+        const inningID = await matchmodel.findById(inning_id);
+        if (!inningID) {
+            return res.status(404).json({ message: 'Inning ID not found' });
+        }
 
         const match = await matchmodel.findOne({ match_id: match_id });
         if (!match) {

@@ -37,7 +37,7 @@ const deletePlayerbyId = async (req, res) => {
         const result = await playermodel.deleteOne({ player_mobile_no: player_mobile_no });
         res.status(200).json({ message: 'Player deleted successfully', player: result });
     } catch (err) {
-        res.status(400).json(err);
+        return res.status(400).json({ message: err.message });
     }
 }
 

@@ -53,7 +53,7 @@ const add_inning_detail = async (req, res) => {
         })
         res.status(200).json({ message: 'Inning detail added successfully', result: result });
     } catch (err) {
-        res.status(400).json(err);
+        return res.status(400).json({ message: err.message });
     }
 }
 

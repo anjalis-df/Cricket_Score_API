@@ -37,7 +37,7 @@ const deleteTeam = async (req, res) => {
         res.status(200).json({ message: 'Team deleted successfully' });
 }
 catch (err) {
-    res.status(400).json(err);
+    return res.status(400).json({ message: err.message });
 }
 };
 

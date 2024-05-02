@@ -9,7 +9,8 @@ const matchInfoSchema = new mongoose.Schema({
     total_over: { type: Number, required: true },
     batting_team_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'team_schema' },
     bowling_team_id: { type: mongoose.Schema.Types.ObjectId, required: true, ref: 'team_schema' },
-    number_of_player_in_both_team: { type: Number, required: true }
+    number_of_player_in_both_team: { type: Number, required: true },
+    match_status: { type: String, required: true },
 })
 
 module.exports = matchInfoSchema
