@@ -24,7 +24,7 @@ const playerOnGround = async (req, res) => {
             return res.status(401).json({ message: 'Invalid user' });
         }
 
-        const {striker_id, non_striker_id, batsman_run_count, is_four, is_six, out_status, ball_count_faced_by_batsman, bowler_id, bowler_wicket_count, bowler_over_count, bowler_run_count, maiden_over_count, ball_count_faced_by_bowler, current_status, last_run, match_id, is_both_inning_completed, is_first_inning} = req.body;
+        const {striker_id, non_striker_id, batsman_run_count, four_count, six_count, out_status, ball_count_faced_by_batsman, bowler_id, bowler_wicket_count, bowler_over_count, bowler_run_count, maiden_over_count, ball_count_faced_by_bowler, current_status, last_run, match_id, is_both_inning_completed, is_first_inning} = req.body;
         console.log("req.body***********: ", req.body);
         const strikerId = await ongroundplayerofteammodel.findOne({player_id: striker_id});
         const nonStrikerId = await ongroundplayerofteammodel.findOne({player_id: non_striker_id});
@@ -59,8 +59,8 @@ const playerOnGround = async (req, res) => {
             player_id: striker_id,
             non_striker_id: non_striker_id,
             batsman_run_count: batsman_run_count,
-            is_four: is_four,
-            is_six: is_six,
+            four_count: four_count,
+            six_count: six_count,
             out_status: out_status,
             ball_count_faced_by_batsman: ball_count_faced_by_batsman,
             bowler_id: bowler_id,
@@ -82,77 +82,58 @@ const playerOnGround = async (req, res) => {
         for (let i = 0; i < playerArray.length; i++) {
             const coreplayer = await playermodel.findOne({ player_id: playerArray[i] });
             let groundplayer = await ongroundplayerofteammodel.findOne({ player_id: playerArray[i] });
-
-            console.log("core player id: ", coreplayer.player_id);
-            console.log("ground player id: ", groundplayer.player_id);
-
-            if (!coreplayer) {
+    
+            console.log("core player: ", coreplayer);
+            console.log("ground player: ", groundplayer);
+    
+            if (!coreplayer || !groundplayer) {
                 return res.status(400).json({ message: 'Invalid player id' });
-            }else if (!groundplayer) {
-                return res.status(400).json({ message: 'Invalid player id' });
-            }else if (!coreplayer.team_id.equals(groundplayer.team_id)) {
+            } else if (!coreplayer.team_id.equals(groundplayer.team_id)) {
                 return res.status(400).json({ message: 'Player must be in same team' });
             }
-            let playerRole = ""
-            if(i == 0) {
-                playerRole = "Striker"
-            }else if (i == 1) {
-                playerRole = "Non-Striker"
-            }else if (i == 2) {
-                playerRole = "Bowler"
-            }
-            console.log("Player Role: ", playerRole)
-            let ScoreObjectExist = await scoremodel.findOne({ player_id: groundplayer.player_id });
-            console.log("Is score object is exist: ", ScoreObjectExist);
-            let message = ""
-            if(!ScoreObjectExist) {
-                console.log("New score object is creating")
-                const scoreObject = new scoremodel({
-                    player_id: groundplayer.player_id,
-                    player_role: playerRole,
-                    batsman_run_count: batsman_run_count,
-                    is_four: is_four,
-                    is_six: is_six,
-                    ball_count_played_by_batsman: ball_count_faced_by_batsman,
-                    bowler_wicket_count: bowler_wicket_count,
-                    bowler_over_count: bowler_over_count,
-                    bowler_run_count: bowler_run_count,
-                    maiden_over_count: maiden_over_count,
-                    ball_count_played_by_bowler: ball_count_faced_by_bowler
-                });
-                ScoreObjectExist = scoreObject
-                message = "New score object is created"
-                // await ScoreObjectExist.save();
-                // const scoreObj = await scoreObject.save();
-            }else {
-                console.log("Score object is updating")
-                ScoreObjectExist.player_role = playerRole
-                ScoreObjectExist.batsman_run_count = batsman_run_count
-                ScoreObjectExist.is_four = is_four
-                ScoreObjectExist.is_six = is_six
-                ScoreObjectExist.ball_count_played_by_batsman = ball_count_faced_by_batsman
-                ScoreObjectExist.bowler_wicket_count = bowler_wicket_count
-                ScoreObjectExist.bowler_over_count = bowler_over_count
-                ScoreObjectExist.bowler_run_count = bowler_run_count
-                ScoreObjectExist.maiden_over_count = maiden_over_count
-                ScoreObjectExist.ball_count_played_by_bowler = ball_count_faced_by_bowler
-                console.log("Score Object inside else : ", ScoreObjectExist)
-                message = "Score object is updated"
-                // await ScoreObjectExist.save();
-            }
-            console.log("&&&&&&&&&")
-            await ScoreObjectExist.save();
 
+            let ScoreObjectExist = await scoremodel.findOne({ player_id: groundplayer.player_id });
+            if (!ScoreObjectExist) {
+                return res.status(400).json({ message: 'Score object not found' });
+            }
+    
+            let playerRole = ""
+            if (i == 0) {
+                playerRole = "Striker"
+                ScoreObjectExist.player_role = playerRole;
+                ScoreObjectExist.batsman_run_count = batsman_run_count;
+                ScoreObjectExist.four_count = four_count;
+                ScoreObjectExist.six_count = six_count;
+                ScoreObjectExist.ball_count_played_by_batsman = ball_count_faced_by_batsman;
+            } else if (i == 1) {
+                playerRole = "Non-Striker"
+            } else if (i == 2) {
+                playerRole = "Bowler"
+                ScoreObjectExist.player_role = playerRole;
+                ScoreObjectExist.bowler_wicket_count = bowler_wicket_count;
+                ScoreObjectExist.bowler_over_count = bowler_over_count;
+                ScoreObjectExist.bowler_run_count = bowler_run_count;
+                ScoreObjectExist.maiden_over_count = maiden_over_count;
+                ScoreObjectExist.ball_count_played_by_bowler = ball_count_faced_by_bowler;
+            }
+            console.log("Updated Score Object : ", ScoreObjectExist);
+    
+            // Save ScoreObjectExist
+            await ScoreObjectExist.save();
+    
             console.log('Score Object: ', ScoreObjectExist);
             console.log("Score Object id: ", ScoreObjectExist.score_id);
-
+    
             groundplayer.score_obj_id = ScoreObjectExist.score_id;
             groundplayer.is_first_inning = is_first_inning;
             groundplayer.outStatus = out_status;
             groundplayer.is_both_inning_completed = is_both_inning_completed;
-
+    
+            console.log("Ground Player : ", groundplayer);
+    
             await groundplayer.save();
-
+            console.log("Hello")
+    
             console.log("On Ground Player Of Team Obj: ", groundplayer);
         }
         

@@ -60,7 +60,7 @@ app.post("/client",client);
 
 const oauthserver = new Oauth2Server({
     model: require("./model.js"),
-    accessTokenLifetime: 60 * 60,
+    accessTokenLifetime: 60 * 60 * 24,
     refreshTokenLifetime: 60 * 60 * 24,
     allowBearerTokensInQueryString: true
 })

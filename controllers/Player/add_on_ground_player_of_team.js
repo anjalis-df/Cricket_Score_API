@@ -24,11 +24,10 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
         if (!user) {
             return res.status(401).json({ message: 'Invalid user' });
         }
-        // console.log("HELLO****************")
+        
         const{ batting, bowling, match_id } = req.body;
         console.log("req.body***********: ", req.body);
-        // console.log("batting: ", batting);
-        // console.log("bowling: ", bowling);
+        
         if(!Array.isArray(batting) || !Array.isArray(bowling)) {
             return res.status(400).json({ message: 'Invalid input' });
         }
@@ -43,11 +42,6 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
         const isBattingPlayerExist = await playermodel.find({ player_mobile_no: { $in: batting.map(player => player.player_mobile_no) } });
         const isBowlingPlayerExist = await playermodel.find({ player_mobile_no: { $in: bowling.map(player => player.player_mobile_no) } });
 
-        // console.log("Given Batting Player Array: ", batting);
-        // console.log("Given Bowling Player Array: ", bowling);
-        // console.log("Given batting Player array length: ", isBattingPlayerExist.length);
-        // console.log("Given bowling Player array length: ", isBowlingPlayerExist.length);
-
         if (isBattingPlayerExist.length !== batting.length || isBowlingPlayerExist.length !== bowling.length) {
             return res.status(400).json({ message: 'Invalid player mobile number' });
         }
@@ -60,9 +54,6 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
         }
 
         const isMatchExist = await matchmodel.findOne({ match_id: match_id });
-        // console.log("Is Match Exist: ", isMatchExist);
-        // console.log("Is Batting Player Exist 0: ", isBattingPlayerExist);
-        // console.log("Is Bowling Player Exist 0: ", isBowlingPlayerExist);
         
         if (!isMatchExist) {
             return res.status(400).json({ message: 'Match does not exist' });
@@ -77,9 +68,6 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
         const isBattingTeamExist = await teammodel.findOne({ team_id: battingTeamInMatch });
         const isBowlingTeamExist = await teammodel.findOne({ team_id: bowlingTeamInMatch });
 
-        // console.log("Is Batting Player Exist 1: ", isBattingPlayerExist);
-        // console.log("Is Bowling Player Exist 1: ", isBowlingPlayerExist);
-
         if (!isBattingTeamExist || !isBowlingTeamExist) {
             return res.status(400).json({ message: 'Team does not exist ' });
         }
@@ -88,7 +76,6 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
             return res.status(400).json({ message: 'Team does not exist ' });
         }
 
-        // console.log("####################")
         const names = new Set();
         const contactNumber = new Set();
 
@@ -123,6 +110,7 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
             }
             const addPlayer = new playerOnGroundmodel({
                 player_id: player.player_id,
+                player_name: player.player_name,
                 team_id: player.team_id,
                 match_id: match_id,
             })
@@ -134,8 +122,8 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
                 player_id: player.player_id,
                 player_role: 'Non-Striker',
                 batsman_run_count: 0,
-                is_four: false,
-                is_six: false,
+                four_count: 0,
+                six_count: 0,
                 ball_count_played_by_batsman: 0,
                 bowler_wicket_count: 0,
                 bowler_over_count: 0,
@@ -166,6 +154,7 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
 
             const addPlayer = new playerOnGroundmodel({
                 player_id: player.player_id,
+                player_name: player.player_name,
                 team_id: player.team_id,
                 match_id: match_id,
             })
@@ -177,8 +166,8 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
                 player_id: player.player_id,
                 player_role: 'Non-Striker',
                 batsman_run_count: 0,
-                is_four: false,
-                is_six: false,
+                four_count: 0,
+                six_count: 0,
                 ball_count_played_by_batsman: 0,
                 bowler_wicket_count: 0,
                 bowler_over_count: 0,
@@ -195,8 +184,6 @@ const addOnGroundPlayerOfTeam = async (req, res) => {
             playerscoreObjects.push(scoreObject);
             playerOnGroundObjects.push(addPlayer);
         }
-        // console.log("Player Score Objects: ", playerscoreObjects);
-        // console.log("Player On Ground Objects: ", playerOnGroundObjects);
 
         const scoreModelResult = await scoremodel.insertMany(playerscoreObjects);
         const playerOnGroundawait = await playerOnGroundmodel.insertMany(playerOnGroundObjects);
