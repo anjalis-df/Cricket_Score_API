@@ -1,4 +1,5 @@
 const teammodel = require('../../models/Team/team_model');
+const playerModel = require('../../models/Player/player_model');
 const tokenmodel = require('../../models/User/token_model');
 const usermodel = require('../../models/User/user_info_model');
 
@@ -23,6 +24,13 @@ const getAllTeam = async (req, res) => {
             return res.status(404).json({ message: 'Teams not found' });
         }
 
+        for (let index = 0; index < teams.length; index++) {
+            const team = teams[index];
+            let filter = { team_id: team.team_id };
+            var data = await playerModel.find(filter);
+            team["teamPlayerCount"] = data.length;
+        }
+       
         res.status(200).json({ message: 'Teams fetched successfully', teams: teams });
     } catch (err) {
         return res.status(400).json({ message: err.message });
