@@ -13,7 +13,7 @@ const userRegistration = async (req, res) => {
         })
         const existingUser = await user_infoModel.findOne({ email: email.toLowerCase() }).lean().exec();
         if (existingUser) {
-            return res.status(400).json({ message: 'User already exists' });
+            return res.status(400).json({ message: 'User already exists with this email' });
         }
         const result = await user.save();
         res.status(201).json("User created successfully");
