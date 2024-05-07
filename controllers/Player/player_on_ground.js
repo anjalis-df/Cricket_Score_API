@@ -31,11 +31,11 @@ const playerOnGround = async (req, res) => {
         const bowlerId = await ongroundplayerofteammodel.findOne({player_id: bowler_id});
         const matchId = await matchmodel.findOne({match_id: match_id});
         
-        console.log("StrikerId: ",strikerId.team_id);
-        console.log("NonStrikerId: ",nonStrikerId.team_id);
+        // console.log("StrikerId: ",strikerId.team_id);
+        // console.log("NonStrikerId: ",nonStrikerId.team_id);
         // console.log("BowlerId: ",bowlerId);
         // console.log("MatchId: ",matchId);
-        console.log("Check Condition of striker and non stiker team: ", !strikerId.team_id.equals(nonStrikerId.team_id))
+        // console.log("Check Condition of striker and non stiker team: ", !strikerId.team_id.equals(nonStrikerId.team_id))
 
         if(strikerId == nonStrikerId) {
             return res.status(400).json({ message: 'Striker and non-striker cannot be same' });
@@ -54,26 +54,6 @@ const playerOnGround = async (req, res) => {
         }else if (nonStrikerId.team_id === bowlerId.team_id) {
             return res.status(400).json({ message: 'Non-striker and bowler should not be in same team' });
         }
-
-    //     striker_id: { type: String, required: true, ref: 'On_ground_player_of_team_schema' },
-    // non_striker_id: { type: String, required: true, ref: 'On_ground_player_of_team_schema' },
-    // batsman_run_count: { type: Number, required: true },
-    // four_count: { type: Number, required: true },
-    // six_count: { type: Number, required: true },
-    // out_status: { type: Boolean, required: true },
-    // ball_count_faced_by_batsman: { type: Number, required: true },
-    // bowler_id: { type: String, required: true, ref: 'On_ground_player_of_team_schema' },
-    // bowler_wicket_count: { type: Number, required: true },
-    // bowler_over_count: { type: Number, required: true },
-    // bowler_run_count: { type: Number, required: true },
-    // maiden_over_count: { type: Number, required: true },
-    // ball_count_faced_by_bowler: { type: Number, required: true },
-    // current_status: { type: String, required: true },
-    // match_id: { type: String, required: true, ref: 'match_info_schema' },
-    // last_run: { type: Number, required: true },
-    // is_both_inning_completed: { type: Boolean, required: true },
-    // is_first_inning: { type: Boolean, required: true }
-
 
 
         const groundScore = new playerongroundmodel({
@@ -100,14 +80,13 @@ const playerOnGround = async (req, res) => {
         console.log("Ground Score: ", groundScore);
 
         const playerArray = [striker_id, non_striker_id, bowler_id];
-        console.log("Player Array: ", playerArray);
 
         for (let i = 0; i < playerArray.length; i++) {
             const coreplayer = await playermodel.findOne({ player_id: playerArray[i] });
             let groundplayer = await ongroundplayerofteammodel.findOne({ player_id: playerArray[i] });
     
-            console.log("core player: ", coreplayer);
-            console.log("ground player: ", groundplayer);
+            // console.log("core player: ", coreplayer);
+            // console.log("ground player: ", groundplayer);
     
             if (!coreplayer || !groundplayer) {
                 return res.status(400).json({ message: 'Invalid player id' });
@@ -163,6 +142,7 @@ const playerOnGround = async (req, res) => {
         return res.status(201).json({ message: 
         "Player updated successfully", groundScore });
     }catch (err) {
+        console.log("error: ", err);
         return res.status(500).json({ message: err.message });
     }
 }
