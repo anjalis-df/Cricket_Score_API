@@ -143,7 +143,8 @@ const playerOnGround = async (req, res) => {
         "Player updated successfully", groundScore });
     }catch (err) {
         console.log("error: ", err);
-        return res.status(500).json({ message: err.message });
+        // return res.status(500).json({ message: err.message });
+        return res.status(500).json({ message: 'Internal server error' });
     }
 }
 
